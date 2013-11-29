@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<title>My Bookmarks 2013 mothafucka</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+		<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js"></script>
+		<script src="http://mustache.github.io/extras/mustache.js"></script>
+		<script src="bookmarks.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<!-- Hide UI until user has authenticated -->
+		<div id="wrapper">
+			<h1>My Bookmarks</h1>
+
+      <form id="addForm" method="get">
+        <input type="text" placeholder="title" name="title" value="Bouya !" />
+        <input type="text" placeholder="url" name="url" value="http://codepen.io/spite/pen/kalKp" />
+        <input type="text" placeholder="text" name="text" value="Ça déboite méchant ça!! css paste" />
+        <button type="submit">Add</button>
+      </form>
+
+      <table id="bookmarks">
+        <tr>
+          <th>Title</th>
+          <th>Url</th>
+          <th>Text</th>
+          <th>Created</th>
+        </tr>
+      </table>
+
+			<div id="login">
+				<button id="loginButton">Link to Dropbox</button>
+			</div>
+		</div>
+	</body>
+</html>
