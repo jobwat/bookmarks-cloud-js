@@ -19,19 +19,23 @@ $(function () {
 	}
 
 	function updateList() {
+		$('#bookmarks').empty();
+
 		var records = bookmarksTable.query();
 
     $(records).each(function(index, record){
       var bookmark = {
-        index: index,
+        id: record.getId(),
         title: record.get('title'),
         url: record.get('url'),
         text: record.get('text'),
         created: record.get('created').toISOString().replace(/(\d+)-(\d+)-(\d+)T(\d+:\d+):\d+.*/, "$3/$2/$1 $4")
       };
-      var template = '<tr id="{{index}}"><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{text}}</td><td>{{created}}</td></tr>';
+      var template = '<tr id="{{id}}"><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{text}}</td><td>{{created}}</td><td><button class="delete">X</button></td></tr>';
       $('#bookmarks').append(Mustache.to_html(template, bookmark));
     });
+
+		addListeners();
 	}
 
 	// The login button will start the authentication process.
@@ -77,7 +81,7 @@ $(function () {
 	function addListeners() {
 		$('button.delete').click(function (e) {
 			e.preventDefault();
-			var id = $(this).parents('li').attr('id');
+			var id = $(this).parents('tr').attr('id');
 			deleteRecord(id);
 		});
 	}
