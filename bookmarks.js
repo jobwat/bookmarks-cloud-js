@@ -31,7 +31,7 @@ $(function () {
         text: record.get('text'),
         created: record.get('created').toISOString().replace(/(\d+)-(\d+)-(\d+)T(\d+:\d+):\d+.*/, "$3/$2/$1 $4")
       };
-      var template = '<tr id="{{id}}"><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{text}}</td><td>{{created}}</td><td><button class="delete">X</button></td></tr>';
+      var template = '<tr id="{{id}}"><td class="title">{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td class="comments">{{text}}</td><td>{{created}}</td><td><button class="delete">X</button></td></tr>';
       $('#bookmarks').append(Mustache.to_html(template, bookmark));
     });
 
@@ -77,12 +77,50 @@ $(function () {
 		bookmarksTable.get(id).deleteRecord();
 	}
 
+	// Update the record 'id' with the given hash
+	function updateRecord(id, hash) {
+    bookmarksTable.get(id).update(hash);
+	}
+
+	// Turn record line as editable
+	function edit(id) {
+    var tr = $('#bookmarks tr#'+id);
+    tr.addClass('edit');
+    var title = $('.title' ,tr).text();
+    $('.title' ,tr) .empty() .append($('<input />', {type: 'text', value: title}));
+    var comments = $('.comments' ,tr).text();
+    $('.comments' ,tr).empty().append($('<textarea />').text(comments));
+	}
+
+  function saveEdits(){
+    $('#bookmarks tr.edit').each(function(index, tr){
+      var title = $('.title input' ,tr).val();
+      $('.title' ,tr).empty().text(title);
+      var comments = $('.comments textarea' ,tr).val();
+      $('.comments' ,tr).empty().text(comments);
+			updateRecord($(tr).attr('id'), { title: title, text: comments });
+      $(tr).removeClass('edit');
+    });
+  }
+
 	// Register event listeners to handle completing and deleting.
 	function addListeners() {
+    $('body').click(function (e) {
+      e.preventDefault();
+      console.log('body click');
+      saveEdits();
+    });
 		$('button.delete').click(function (e) {
 			e.preventDefault();
 			var id = $(this).parents('tr').attr('id');
 			deleteRecord(id);
+		});
+		$('.title, .comments').click(function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+      if($(this).parents('tr').hasClass('edit')){ return; }
+			var id = $(this).parents('tr').attr('id');
+      edit(id);
 		});
 	}
 
