@@ -136,4 +136,14 @@ $(function () {
     return false;
   });
 
+  client.getDatastoreManager().openDefaultDatastore(function (error, datastore) {
+    $('#status').text('In sync');
+    datastore.syncStatusChanged.addListener(function () {
+      if (datastore.getSyncStatus().uploading) {
+        $('#status').text('Synchronizing...');
+      } else {
+        $('#status').text('In sync');
+      }
+    });
+  });
 });
