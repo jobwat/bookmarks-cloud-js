@@ -92,6 +92,7 @@ $(function () {
     $('.comments' ,tr).empty().append($('<textarea />').text(comments));
   }
 
+  // Update edited records and turn them back as read-only lines
   function saveEdits(){
     $('#bookmarks tr.edit').each(function(index, tr){
       var title = $('.title input' ,tr).val();
@@ -103,18 +104,23 @@ $(function () {
     });
   }
 
-  // Register event listeners to handle completing and deleting.
+  // Register event listeners
   function addListeners() {
-    $('body').click(function (e) {
+    // Listen outside the form for a click
+    $('html').click(function (e) {
       e.preventDefault();
-      console.log('body click');
+      console.log('html click');
       saveEdits();
     });
+
+    // Delete click
     $('button.delete').click(function (e) {
       e.preventDefault();
       var id = $(this).parents('tr').attr('id');
       deleteRecord(id);
     });
+
+    // Title, comments edit clicks
     $('.title, .comments').click(function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -126,13 +132,15 @@ $(function () {
 
   // Hook form submit and add the new task.
   $('#addForm').submit(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('add');
     var bookmark = {
       title: e.target.title.value,
       url: e.target.url.value,
       text: e.target.text.value
     };
     insertBookmark(bookmark);
-    e.preventDefault();
     return false;
   });
 
