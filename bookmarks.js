@@ -53,6 +53,9 @@ $(function () {
   });
 
   if (client.isAuthenticated()) {
+
+    console.log('authenticated');
+
     // Client is authenticated. Display UI.
     $('#loginButton').hide();
     $('#main').show();
@@ -154,4 +157,7 @@ $(function () {
       }
     });
   });
+
+  console.log('bookmarks.js loaded');
+
 });
